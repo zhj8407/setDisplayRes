@@ -36,12 +36,12 @@ namespace setDisplayRes
             Console.WriteLine(" -listmodes : lists modes of a Displays                 ");
             Console.WriteLine();
 
-            bool bSet = false;
+            bool bSet = true;
             bool bListDisplays = false;
             bool bListDisplayModes = false;
             string strArguments = "";
             foreach (string arg in args)
-            {               
+            {
                 if (strArguments != "")
                 {
                     strArguments += " ";
@@ -54,7 +54,8 @@ namespace setDisplayRes
                 if (strLowerArg == "-list")
                 {
                     bListDisplays = true;
-                }else if (strLowerArg == "-listmodes")
+                }
+                else if (strLowerArg == "-listmodes")
                 {
                     bListDisplayModes = true;
                 }
@@ -63,20 +64,20 @@ namespace setDisplayRes
                     bSet = true;
                 }
                 else
-                {                   
-                    string strWrongArgMsg = " UNKNOWN ARGUMENT: " + arg;
-                    Console.WriteLine(strWrongArgMsg);
-                    _log.Error(strWrongArgMsg);
+                {
+                    // string strWrongArgMsg = " UNKNOWN ARGUMENT: " + arg;
+                    // Console.WriteLine(strWrongArgMsg);
+                    // _log.Error(strWrongArgMsg);
 
-                    //exit delay animation
-                    ExitWithDelay(3000);
+                    // //exit delay animation
+                    // ExitWithDelay(3000);
 
-                    return; //exit
+                    // return; //exit
                 }
-                
+
             }//foreach arg
 
-            _log.Debug("Program Start, Arguments: " + strArguments);            
+            _log.Debug("Program Start, Arguments: " + strArguments);
             _log.Debug("User: '" + Environment.UserName + "'.");
             _log.Debug("UserInteractive: '" + Environment.UserInteractive.ToString() + "'.");
             _log.Debug("CurrentDirectory: '" + Environment.CurrentDirectory + "'.");
@@ -88,24 +89,25 @@ namespace setDisplayRes
             {
                 _log.Debug("list displays");
 
-               //get all Displays
+                //get all Displays
                 Display display = new Display();
                 List<DISPLAY_DEVICE> displays = display.GetDisplayList();
 
                 Console.WriteLine();
                 foreach (DISPLAY_DEVICE dev in displays)
                 {
-                    String strDevice = "Name: '" + dev.DeviceName + "' String: '" + dev.DeviceString + "' Id: '" + dev.DeviceID + "'.";
-                    Console.WriteLine("Device Found: " + strDevice);                                           
+                    String strDevice = "Name: '" + dev.DeviceName + "' String: '" + dev.DeviceString + "' Id: '" + dev.DeviceID + "' Key: '" + dev.DeviceKey + "'.";
+                    Console.WriteLine("Device Found: " + strDevice);
                 }
-                
+
             }
             else if (bListDisplayModes)
             {
                 _log.Debug("list modes of a display");
 
-                Console.WriteLine("Enter a DeviceName to process:");
-                string strDeviceName = Console.ReadLine();
+                // Console.WriteLine("Enter a DeviceName to process:");
+                // string strDeviceName = Console.ReadLine();
+                string strDeviceName = "\\\\.\\DISPLAY2";
 
                 //get all Modes
                 Display display = new Display();
@@ -113,7 +115,9 @@ namespace setDisplayRes
 
                 foreach (DevMode mode in modes)
                 {
-                    String strMode = "Width: '" + mode.dmPelsWidth + "' Height: '" + mode.dmPelsHeight + "' Frequency: '" + mode.dmDisplayFrequency.ToString() + "'.";
+                    String strMode = "Width: '" + mode.dmPelsWidth + "' Height: '" + mode.dmPelsHeight + "' Frequency: '" + mode.dmDisplayFrequency.ToString() + "'";
+                    strMode += " PositionX: '" + mode.dmPositionX + "' PositionY: '" + mode.dmPositionY + "'";
+                    strMode += ".";
                     Console.WriteLine(strMode);
                 }
 
@@ -186,7 +190,7 @@ namespace setDisplayRes
             _log.Debug("read config, End");
 
 
-            //get all Displays from Windows 
+            //get all Displays from Windows
             Display display = new Display();
             List<DISPLAY_DEVICE> windowsdisplays = display.GetDisplayList();
 
@@ -212,7 +216,7 @@ namespace setDisplayRes
                         if (configDisplay.devicestring.ToLower() == dev.DeviceString.ToLower())
                         {
                             bMatchingName = true;
-                        }                        
+                        }
                     }
                     else if (configDisplay.deviceid != "")
                     {
@@ -224,7 +228,7 @@ namespace setDisplayRes
                     }
                     else
                     {
-                        throw new Exception("must define name, devicestring or deviceid");                    
+                        throw new Exception("must define name, devicestring or deviceid");
                     }
 
                     //found?
@@ -274,7 +278,7 @@ namespace setDisplayRes
                             if (bResFound)
                             {
                                 bool bSetAsPrimary = false;
-                                if(bUsePrimarySettings)
+                                if (bUsePrimarySettings)
                                 {
                                     bSetAsPrimary = configDisplay.primary;
                                 }
@@ -301,25 +305,25 @@ namespace setDisplayRes
                             _log.Debug("no matching settings found for device, name: '" + dev.DeviceName + "', id: '" + dev.DeviceID + "'.");
                         }
                     }//if match
-                }//foreach config entry                    
-            }//foreach windows device        
+                }//foreach config entry
+            }//foreach windows device
         }
 
         static private void ExitWithDelay(long a_lDelayMs)
         {
-            //exit delay animation            
-            if (a_lDelayMs > 1000)
-            {
+            // //exit delay animation
+            // if (a_lDelayMs > 1000)
+            // {
 
-                Console.WriteLine("");
+            //     Console.WriteLine("");
 
-                // chose one of the exit animations...
+            //     // chose one of the exit animations...
 
-                //AnimateTheDotsLine(a_lDelayMs); //shit
-                AnimateTheSecondsCounter(a_lDelayMs, "Exit in: '"); // okay   
+            //     //AnimateTheDotsLine(a_lDelayMs); //shit
+            //     AnimateTheSecondsCounter(a_lDelayMs, "Exit in: '"); // okay
 
-                // coming soon in this theater: multiline animations ! ;-)               
-            }
+            //     // coming soon in this theater: multiline animations ! ;-)
+            // }
         }
 
         static private void AnimateTheSecondsCounter(long a_lDelayMs, string a_strText)
@@ -337,6 +341,6 @@ namespace setDisplayRes
                 Console.Write(new string('\b', strText.Length));
             }
         }//AnimateTheCounter
-                
-    }//class    
+
+    }//class
 }//ns

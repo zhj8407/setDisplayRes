@@ -3,81 +3,81 @@ using System.Runtime.InteropServices;
 
 namespace PInvoke.WindowsResolution
 {
-	// Encapsulate the magic numbers for the return value in an enumeration
-	public enum ReturnCodes : int
-	{
-		DISP_CHANGE_SUCCESSFUL = 0,
-		DISP_CHANGE_BADDUALVIEW = -6,
-		DISP_CHANGE_BADFLAGS = -4,
-		DISP_CHANGE_BADMODE = -2,
-		DISP_CHANGE_BADPARAM = -5,
-		DISP_CHANGE_FAILED = -1,
-		DISP_CHANGE_NOTUPDATED = -3,
-		DISP_CHANGE_RESTART = 1
-	}
+    // Encapsulate the magic numbers for the return value in an enumeration
+    public enum ReturnCodes : int
+    {
+        DISP_CHANGE_SUCCESSFUL = 0,
+        DISP_CHANGE_BADDUALVIEW = -6,
+        DISP_CHANGE_BADFLAGS = -4,
+        DISP_CHANGE_BADMODE = -2,
+        DISP_CHANGE_BADPARAM = -5,
+        DISP_CHANGE_FAILED = -1,
+        DISP_CHANGE_NOTUPDATED = -3,
+        DISP_CHANGE_RESTART = 1
+    }
 
-	// To see how the DEVMODE struct was translated from the unmanaged to the managed see the Task 2 Declarations section
+    // To see how the DEVMODE struct was translated from the unmanaged to the managed see the Task 2 Declarations section
 
-	// http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/prntspol_8nle.asp
-	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-	public struct DevMode
-	{
-		// The MarshallAs attribute is covered in the Background section of the article
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-		public string dmDeviceName;
+    // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/prntspol_8nle.asp
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    public struct DevMode
+    {
+        // The MarshallAs attribute is covered in the Background section of the article
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+        public string dmDeviceName;
 
-		public short dmSpecVersion;
-		public short dmDriverVersion;
-		public short dmSize;
-		public short dmDriverExtra;
-		public int dmFields;
-		public int dmPositionX;
-		public int dmPositionY;
-		public int dmDisplayOrientation;
-		public int dmDisplayFixedOutput;
-		public short dmColor;
-		public short dmDuplex;
-		public short dmYResolution;
-		public short dmTTOption;
-		public short dmCollate;
+        public short dmSpecVersion;
+        public short dmDriverVersion;
+        public short dmSize;
+        public short dmDriverExtra;
+        public int dmFields;
+        public int dmPositionX;
+        public int dmPositionY;
+        public int dmDisplayOrientation;
+        public int dmDisplayFixedOutput;
+        public short dmColor;
+        public short dmDuplex;
+        public short dmYResolution;
+        public short dmTTOption;
+        public short dmCollate;
 
-		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-		public string dmFormName;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+        public string dmFormName;
 
-		public short dmLogPixels;
-		public short dmBitsPerPel;
-		public int dmPelsWidth;
-		public int dmPelsHeight;
-		public int dmDisplayFlags;
-		public int dmDisplayFrequency;
-		public int dmICMMethod;
-		public int dmICMIntent;
-		public int dmMediaType;
-		public int dmDitherType;
-		public int dmReserved1;
-		public int dmReserved2;
-		public int dmPanningWidth;
-		public int dmPanningHeight;
+        public short dmLogPixels;
+        public short dmBitsPerPel;
+        public int dmPelsWidth;
+        public int dmPelsHeight;
+        public int dmDisplayFlags;
+        public int dmDisplayFrequency;
+        public int dmICMMethod;
+        public int dmICMIntent;
+        public int dmMediaType;
+        public int dmDitherType;
+        public int dmReserved1;
+        public int dmReserved2;
+        public int dmPanningWidth;
+        public int dmPanningHeight;
 
-		public override string ToString()
-		{
-			return dmPelsWidth.ToString() + " x " + dmPelsHeight.ToString();
-		}
+        public override string ToString()
+        {
+            return dmPelsWidth.ToString() + " x " + dmPelsHeight.ToString();
+        }
 
 
-		public string[] GetInfoArray()
-		{
-			string[] items = new string[5];
+        public string[] GetInfoArray()
+        {
+            string[] items = new string[5];
 
-			items[0] = dmDeviceName;
-			items[1] = dmPelsWidth.ToString();
-			items[2] = dmPelsHeight.ToString();
-			items[3] = dmDisplayFrequency.ToString();
-			items[4] = dmBitsPerPel.ToString();
+            items[0] = dmDeviceName;
+            items[1] = dmPelsWidth.ToString();
+            items[2] = dmPelsHeight.ToString();
+            items[3] = dmDisplayFrequency.ToString();
+            items[4] = dmBitsPerPel.ToString();
 
-			return items;
-		}
-	}
+            return items;
+        }
+    }
 
 
     //Display Listening
@@ -156,13 +156,16 @@ namespace PInvoke.WindowsResolution
         SDC_APPLY = 0x00000080,
     }
 
-	class NativeMethods
-	{
-		// http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/devcons_84oj.asp
-		[DllImport("user32.dll", CharSet = CharSet.Ansi)]
-		public static extern int EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DevMode lpDevMode);
+    class NativeMethods
+    {
+        // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/devcons_84oj.asp
+        [DllImport("user32.dll", CharSet = CharSet.Ansi)]
+        public static extern int EnumDisplaySettings(string lpszDeviceName, int iModeNum, ref DevMode lpDevMode);
 
-		// http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/devcons_7gz7.asp
+        [DllImport("user32.dll", CharSet = CharSet.Ansi)]
+        public static extern int EnumDisplaySettingsEx(string lpszDeviceName, int iModeNum, ref DevMode lpDevMode, int dwFlags);
+
+        // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/devcons_7gz7.asp
         [DllImport("user32.dll", CharSet = CharSet.Ansi)] //CallingConvention = CallingConvention.Cdecl
         public static extern ReturnCodes ChangeDisplaySettingsEx(string lpszDeviceName, ref DevMode lpDevMode, IntPtr hwnd, ChangeDisplaySettingsFlags dwFlags, IntPtr lParam);
 
@@ -189,6 +192,6 @@ namespace PInvoke.WindowsResolution
         public static extern long SetDisplayConfig(uint numPathArrayElements, IntPtr pathArray, uint numModeArrayElements, IntPtr modeArray, ChangeDisplayConfigFlags flags);
 
 
-		public const int ENUM_CURRENT_SETTINGS = -1;
-	}
+        public const int ENUM_CURRENT_SETTINGS = -1;
+    }
 }

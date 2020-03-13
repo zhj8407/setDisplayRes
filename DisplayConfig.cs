@@ -29,7 +29,7 @@ namespace setDisplayRes
         }
     }//class
 
-    
+
 
     [ConfigurationCollection(typeof(DisplayElement))]
     class DisplayCollection : ConfigurationElementCollection
@@ -63,7 +63,7 @@ namespace setDisplayRes
             strValues += "setres: '" + setres.ToString() + "' ";
             strValues += "width: '" + width + "' ";
             strValues += "height: '" + height + "' ";
-            strValues += "freqhz: '" + freqhz + "' ";   
+            strValues += "freqhz: '" + freqhz + "' ";
             return strValues;
         }
 
@@ -153,7 +153,7 @@ namespace setDisplayRes
             }
 
         }
-        
+
 
         [ConfigurationProperty("width", DefaultValue = 1280, IsKey = false, IsRequired = true)]
         public int width
